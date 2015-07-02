@@ -1,0 +1,80 @@
+题目：
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+分析：
+该题目标记为Medium，难度为中等，阅读题目后，第一反应便是两次遍历数组，些许判断便可解决。然后三下五除二写下了代码，信心满满提交：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+class Solution  
+{  
+public:  
+    vector<int> twoSum(vector<int> &numbers , int target)  
+    {  
+        vector<int> index;  
+        for(int i=0 ; i!=numbers.size(); i++)  
+        {  
+            for(int j=numbers.size()-1 ; j>i; j--)  
+                if((numbers[i]+numbers[j]) == target)  
+                {  
+                    index.push_back(i+1);  
+                    index.push_back(j+1);  
+                    break;  
+                }  
+  
+        }//for  
+        return index;  
+    }//twoSum  
+};  
+没错，想嘛，堂堂LeetCode中等难度的题目，就这样可以AC的话岂不是。。。于是，我就得到了这样的回应：
+Status:   Time Limit Exceeded  
+再次分析：
+重新审视题目，上面提供的O(n^2)的算法肯定达不到要求，到底应该用什么方式可以避免重叠循环，思来想去还是没有答案，最终还是只能求助百度了。当扫到一网友的分析后，恍然大悟，我们学习哈希干嘛的呀，就是因为它有着与生俱来的复杂度的优势。
+废话不多说，下面提供AC代码：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+class Solution  
+{  
+public:  
+    vector<int> twoSum(vector<int> &numbers , int target)  
+    {  
+        vector<int> index;  
+        map<int , int> hashMap;  
+        for(unsigned int i=0 ; i<numbers.size(); i++)  
+        {  
+            if(!hashMap.count(numbers[i]))  
+                hashMap.insert(make_pair(numbers[i] , i));  
+            if(hashMap.count(target-numbers[i]))  
+            {  
+                int pos = hashMap[target-numbers[i]];  
+                if(pos < i)  
+                {  
+                    index.push_back(pos+1);  
+                    index.push_back(i+1);  
+                }  
+            }//if  
+        }//for  
+        return index;  
+    }//twoSum  
+};  
+这样，算法复杂度就降到了O(n)，顺利AC了我的第一个LeetCode题目。
+看来，自己还是水到家了，还需要继续努力！
+测试main函数：
+为了方便程序测试，这儿也提供main函数的代码，供于参考：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+int main()  
+{  
+    Solution s;  
+    int arr[3] = {3,2,4};  
+    int target = 6;  
+    vector<int> numbers(arr , arr+3);  
+    vector<int> index;  
+    index = s.twoSum(numbers , target);  
+  
+    cout<<"index1="<<index[0]<<", index2="<<index[1]<<endl;  
+    return 0;  
+}  

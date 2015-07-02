@@ -1,0 +1,116 @@
+题目：
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+
+分析：
+这个题目涉及到链表知识，关于指针、链表自从接触就是我的弱势，到现在那么多年过去了，依然没有改变。但是，既然撞上了，还是必须义无反顾的应战的。分析一下题目，它是说有两个链表，每个链表存储非负数值，链表的每个节点都是一位个位数字，数值倒序存储在链表中，两者求和并以链表的形式返回。
+题目信息分析完毕后，开始动手吧，哎，依然是头皮发麻呀~
+AC代码：
+这个题目的代码编写到调试，再到最后的AC，可真是花费了不少功夫呀，好在功夫不负有心人，嘿嘿，问题代码就不上传了，下面贴出AC代码：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+/** 
+ * Definition for singly-linked list. 
+ * struct ListNode { 
+ *     int val; 
+ *     ListNode *next; 
+ *     ListNode(int x) : val(x), next(NULL) {} 
+ * }; 
+ */  
+class Solution  
+{  
+public:  
+    ListNode *addTwoNumbers(ListNode* l1 , ListNode *l2)  
+    {  
+        if(l1 == NULL)  
+            return l2;  
+        if(l2 == NULL)  
+            return l1;  
+  
+        vector<int> v1;  
+        vector<int> v2;  
+        ListNode *head=NULL , *rear=NULL;  
+        while(l1 != NULL)  
+        {  
+            v1.push_back(l1->val);  
+            l1 = l1->next;  
+        }  
+        while(l2 != NULL)  
+        {  
+            v2.push_back(l2->val);  
+            l2 = l2->next;  
+        }  
+  
+        if(v1.size() < v2.size())  
+        {  
+            for(int k=v1.size() ; k<v2.size() ; k++)  
+                v1.push_back(0);  
+        }else  
+        {  
+            for(int k=v2.size() ; k<v1.size() ; k++)  
+                v2.push_back(0);  
+        }  
+        int temp = 0;  
+        int value = 0;  
+        for(int j=0 ; j<v1.size() ; j++)  
+        {  
+            int sum = v1[j] + v2[j] + temp;  
+            temp = sum / 10;  
+            value = sum % 10;  
+            ListNode *node = new ListNode(value);  
+            if(head == NULL)  
+                head = node;  
+            if(rear == NULL)  
+                rear = node;  
+            else  
+            {  
+                rear->next = node;  
+                rear = rear->next;  
+            }  
+        }  
+        if(temp != 0 && rear!=NULL)  
+        {  
+            ListNode *node = new ListNode(temp);  
+            rear->next = node;  
+        }  
+        return head;  
+    }  
+};  
+测试Main函数：
+为了方便测试，下面提供Main测试代码，说明，在LeetCode页面提交代码，只需要上传Solution类即可：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+int main()  
+{  
+    ListNode *l1=NULL , *r1=NULL, *l2 = NULL , *r2=NULL , *result=NULL;  
+    int arr1[3] = {2,4,3};  
+    int arr2[3] = {5,6,4};  
+    for(int i=0 ; i<3 ; i++)  
+    {  
+        ListNode *node1 = new ListNode(arr1[i]);  
+        ListNode *node2 = new ListNode(arr2[i]);  
+        if(l1 == NULL)  
+            l1 = node1;  
+        if(r1 == NULL)  
+            r1 = node1;  
+        else{  
+            r1->next = node1;  
+            r1 = r1->next;  
+        }  
+        if(l2 == NULL)  
+            l2 = node2;  
+        if(r2 == NULL)  
+            r2 = node2;  
+        else{  
+            r2->next = node2;  
+            r2 = r2->next;  
+        }  
+    }  
+    Solution s;  
+    result = s.addTwoNumbers(l1,l2);  
+    for( ; result!=NULL ; result=result->next)  
+        cout<<result->val<<"->";  
+    cout<<endl;  
+    system("pause");  
+    return 0;  
+}  

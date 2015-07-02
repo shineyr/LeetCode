@@ -1,0 +1,90 @@
+题目：
+Reverse digits of an integer.
+
+Example1: x = 123, return 321
+Example2: x = -123, return -321
+
+分析：
+乍看，好似是一个很简单的题目，只需要将整数从最低位起到最高位依次处理即可，但是，此题的关键在于如何处理溢出数据。我们知道，Integer类型数据的范围是：
+#define       INT_MIN         (-2147483647 - 1)          /* minimum (signed) int value */
+#define       INT_MAX       2147483647                   /* maximum (signed) int value */
+而且，此处的溢出判断必须同时包括原始数据x 以及反转结果，均不越界。
+溢出判断：
+（1）2147483647 为十位数，首先，当x为9位数及以下时，原始数据与反转数据均不会越界；
+（2）对反转做特殊判断，参考博客：http://blog.csdn.net/stephen_wong/article/details/28779481
+溢出判断代码：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+bool overflow(int x)  
+    {  
+        if (x / 1000000000 == 0) // x的绝对值小于1000000000, 不越界  
+        {  
+            return false;  
+        } else if (x == INT_MIN) // INT_MIN反转后越界，也没法按下述方法取绝对值（需要特判），直接返回true  
+        {  
+            return true;  
+        }   
+        x = abs(x);  
+        // x = d463847412 ->  2147483647. (参数x，本身没有越界，所以d肯定是1或2)  
+        // or -d463847412 -> -2147483648.   
+        for (int cmp = 463847412; cmp != 0; cmp/=10, x/=10)  
+        {  
+            if ( x%10 > cmp%10 )  
+            {  
+                return true;  
+            } else if (x%10 < cmp%10)  
+            {  
+                return false;  
+            }  
+        }  
+          
+        return false;  
+    }  
+AC代码：
+[cpp] view plaincopyprint?在CODE上查看代码片派生到我的代码片
+class Solution   
+{  
+public:  
+    int reverse(int x)   
+    {  
+        if( overflow(x) == true)  
+        {  
+            return 0;  
+        }  
+  
+        int result = 0;  
+          
+        while (x!=0)  
+        {  
+            result = 10*result + x%10;  
+            x /= 10;  
+        }  
+  
+        return result;  
+    }  
+private:  
+    bool overflow(int x)  
+    {  
+        if (x / 1000000000 == 0) // x的绝对值小于1000000000, 不越界  
+        {  
+            return false;  
+        } else if (x == INT_MIN) // INT_MIN反转后越界，也没法按下述方法取绝对值（需要特判），直接返回true  
+        {  
+            return true;  
+        }   
+        x = abs(x);  
+        // x = d463847412 ->  2147483647. (参数x，本身没有越界，所以d肯定是1或2)  
+        // or -d463847412 -> -2147483648.   
+        for (int cmp = 463847412; cmp != 0; cmp/=10, x/=10)  
+        {  
+            if ( x%10 > cmp%10 )  
+            {  
+                return true;  
+            } else if (x%10 < cmp%10)  
+            {  
+                return false;  
+            }  
+        }  
+          
+        return false;  
+    }  
+};  
