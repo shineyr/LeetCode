@@ -12,6 +12,7 @@ struct ListNode
 
 class Solution {
 public:
+	//方法一：头插法
 	ListNode* reverseList(ListNode* head) {
 		if (head == NULL)
 			return head;
@@ -27,6 +28,26 @@ public:
 			head = p;
 			p = r;
 		}
+		return head;
+	}
+
+	//方法二：递归实现
+	ListNode* reverseList2(ListNode* head) {
+		if (head == NULL)
+			return head;
+
+		ListNode *p = head;
+
+		//反转其余节点组成的链表，将头结点链接到尾部
+		if (head->next)
+		{
+			head = reverseList(head->next);
+			ListNode *r = head;
+			while (r->next)
+				r = r->next;
+			r->next = p;
+		}			
+		p->next = NULL;
 		return head;
 	}
 };
@@ -82,7 +103,7 @@ int main()
 	display(head);
 
 
-	head = s.reverseList(head);
+	head = s.reverseList2(head);
 
 	display(head);
 	system("pause");
