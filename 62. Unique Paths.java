@@ -15,18 +15,17 @@ public class NO_62 {
     }
 
     class Solution {
-        //m列n行
         public int uniquePaths(int m, int n) {
-            int[][] dp = new int[n][m];
+            int[][] dp = new int[m][n];
             dp[0][0] = 1;
 
-            for(int i=0; i<n; ++i) {
-                for (int j=0; j<m; ++j) {
+            for(int i=0; i<m; ++i) {
+                for (int j=0; j<n; ++j) {
                     dp[i][j] += (i == 0 ? 0 : dp[i-1][j]) + (j == 0 ? 0 : dp[i][j-1]);
                 }
             }
 
-            return dp[n-1][m-1];
+            return dp[m-1][n-1];
         }
     }
 }
