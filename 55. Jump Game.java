@@ -7,38 +7,47 @@
  *
  * Determine if you are able to reach the last index.
  */
-public class NO_55 {
-    Solution solution = new Solution();
+class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums.length <= 1) {
+            return true;
+        }
 
-    public static void main(String[] args) {
-        System.out.println(new NO_55().solution.canJump(new int[]{0, 1, 1, 1}));
+        int farthest = nums[0];
+
+        for (int i = 1; i < nums.length; ++i) {
+            if (farthest < i) {
+                return false;
+            }
+
+            farthest = Math.max(farthest, i + nums[i]);
+        }
+
+        return farthest >= nums.length - 1;
     }
 
+    public boolean canJump2(int[] nums) {
+        int[] maxJump = new int[nums.length];
 
-    private class Solution {
-        public boolean canJump(int[] nums) {
-            int[] maxJump = new int[nums.length];
-
-            maxJump[0] = nums[0];
-            for (int i=1; i<nums.length; ++i) {
-                if (maxJump[i-1] < i) {
-                    return false;
-                }
-
-                maxJump[i] = Math.max(maxJump[i-1], i + nums[i]);
+        maxJump[0] = nums[0];
+        for (int i=1; i<nums.length; ++i) {
+            if (maxJump[i-1] < i) {
+                return false;
             }
 
-            return maxJump[nums.length - 1] > nums.length - 1;
+            maxJump[i] = Math.max(maxJump[i-1], i + nums[i]);
         }
 
-        public boolean canJump2(int[] nums) {
-            int lastPos = nums.length - 1;
-            for (int i = nums.length - 1; i >= 0; i--) {
-                if (i + nums[i] >= lastPos) {
-                    lastPos = i;
-                }
+        return maxJump[nums.length - 1] > nums.length - 1;
+    }
+
+    public boolean canJump1(int[] nums) {
+        int lastPos = nums.length - 1;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (i + nums[i] >= lastPos) {
+                lastPos = i;
             }
-            return lastPos == 0;
         }
+        return lastPos == 0;
     }
 }
