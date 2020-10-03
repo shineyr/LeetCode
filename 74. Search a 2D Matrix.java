@@ -7,6 +7,33 @@ class Solution {
 
         int cols = matrix[0].length;
 
+        int left = 0, right = rows * cols - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            int row = mid / cols, col = mid % cols;
+
+            if (matrix[row][col] == target) {
+                return true;
+            } else if (target > matrix[row][col]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean searchMatrix1(int[][] matrix, int target) {
+        int rows = matrix.length;
+        if (rows <= 0) {
+            return false;
+        }
+
+        int cols = matrix[0].length;
+
         int begRow = 0, endRow = rows - 1, targetRow = 0;
         while (begRow < endRow) {
             int midRow = begRow + (endRow - begRow) / 2;
