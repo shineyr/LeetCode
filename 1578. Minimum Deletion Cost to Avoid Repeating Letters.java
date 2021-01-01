@@ -7,6 +7,25 @@ class Solution {
         
         int sumCost = 0;
         
+        for (int i = 0; i < sLen-1; ++i) {
+            if (s.charAt(i+1) == s.charAt(i)) {
+                sumCost += Math.min(cost[i], cost[i+1]);
+                
+                cost[i+1] = Math.max(cost[i], cost[i+1]);
+            }
+        }
+        
+        return sumCost;
+    }
+    
+    public int minCost1(String s, int[] cost) {
+        int sLen = s.length();
+        if (sLen <= 1) {
+            return 0;
+        }
+        
+        int sumCost = 0;
+        
         for (int i = 0; i < sLen; ) {
             char c = s.charAt(i);
             
