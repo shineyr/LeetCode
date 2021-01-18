@@ -9,8 +9,36 @@
  * }
  */
 class Solution {
-    
+    // O(klogN) 
     public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<Integer> pQueue = new PriorityQueue<>();
+        
+        for (ListNode list : lists) {
+            ListNode p = list;
+            while(p != null) {
+                pQueue.add(p.val);
+                p = p.next;
+            }
+        }
+        
+        ListNode dummyHead = new ListNode(0), p = dummyHead;
+        
+        Iterator iter = pQueue.iterator();
+        while(iter.hasNext()) {
+            int val = (int) pQueue.poll();
+            p.next = new ListNode(val);
+            
+            p = p.next;
+        }
+        
+        p.next = null;
+        
+        return dummyHead.next;
+    }
+    
+    
+    // Time Complexity = O(logkN)
+    public ListNode mergeKLists2(ListNode[] lists) {
         int len = lists.length;
         
         if (len < 1) {
@@ -31,6 +59,7 @@ class Solution {
     }
     
     
+    // Time Complexity = O(kN) N is total nodes number, k is the number of lists; Space Complexity = O(1)
     public ListNode mergeKLists1(ListNode[] lists) {
         if (lists.length < 1) {
             return null;
@@ -44,6 +73,7 @@ class Solution {
         return mergedList;
     }
     
+    // Time Complexity = O(N) N is max length of nodes; Space Complexity = O(1)
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         if (list1 == null) {
             return list2;
