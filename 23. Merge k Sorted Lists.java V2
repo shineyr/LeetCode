@@ -1,0 +1,95 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    
+    public ListNode mergeKLists(ListNode[] lists) {
+        int len = lists.length;
+        
+        if (len < 1) {
+            return null;
+        }
+        
+        int interval = 1;
+        
+        while(interval < len) {
+            for (int i = 0; i < len - interval; i += (interval * 2)) {
+                lists[i] = mergeTwoLists(lists[i], lists[i+interval]);
+            }
+            
+            interval *= 2;
+        }
+        
+        return lists[0];
+    }
+    
+    
+    public ListNode mergeKLists1(ListNode[] lists) {
+        if (lists.length < 1) {
+            return null;
+        }
+        
+        ListNode mergedList = null;
+        for (ListNode list : lists) {
+            mergedList = mergeTwoLists(mergedList, list);
+        }
+        
+        return mergedList;
+    }
+    
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        
+        if (list2 == null) {
+            return list1;
+        }
+        
+        ListNode dummyHead = new ListNode(0), p = dummyHead;
+        
+        ListNode l1 = list1, l2 = list2;
+        while(l1 != null || l2 != null) {            
+            if (l1 != null && l2 != null) {
+                if (l1.val < l2.val) {
+                    p.next = l1;
+                    l1 = l1.next;
+                } else {
+                    p.next = l2;
+                    l2 = l2.next;
+                }
+                
+                p = p.next;
+                
+                continue;
+            }
+            
+            if (l1 != null) {
+                p.next = l1;
+                l1 = l1.next;
+                
+                p = p.next;
+                
+                continue;
+            } 
+            
+            if (l2 != null) {
+                p.next = l2;
+                l2 = l2.next;
+                
+                p = p.next;
+                continue;
+            }
+        }
+                
+        return dummyHead.next;
+    }   
+    
+}
